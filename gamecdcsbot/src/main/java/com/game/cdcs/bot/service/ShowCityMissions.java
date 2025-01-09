@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import com.game.cdcs.bot.entity.City;
-import com.game.cdcs.bot.entity.Mission;
+import com.game.cdcs.bot.entity.CityMission;
 import com.game.cdcs.bot.entity.PlayerProfile;
 import com.game.cdcs.bot.handleupdate.CallbackCommand;
 import com.game.cdcs.bot.handleupdate.SendResult;
@@ -51,16 +51,18 @@ public class ShowCityMissions {
 		List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
 		for (int indexMission = 0; indexMission < city.getMissions().size(); indexMission++) {
-			Mission mission = city.getMissions().get(indexMission);
+			CityMission mission = city.getMissions().get(indexMission);
+
+			var reward = mission.getReward();
 
 			missions//
 					.append(indexMission + 1)//
 					.append(": ")//
 					.append(mission.getGoal().getDescription())//
 					.append(" -> ")//
-					.append(" [" + mission.getGoldReward() + " €]")//
-					.append(mission.isGrantsTrophy() ? " <T> " : "") //
-					.append(mission.getSpecialEffectReward().isPresent() ? " {*} " : "") //
+					.append(" [" + reward.getGoldReward() + " €]")//
+					.append(reward.isTrophy() ? " <T> " : "") //
+					.append(reward.isNoTrophy() ? " {*} " : "") //
 					.append("\n");
 
 			InlineKeyboardButton button = telegramHelper.createButton("Missione " + (indexMission + 1),

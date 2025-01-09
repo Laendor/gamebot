@@ -1,16 +1,17 @@
 package com.game.cdcs.bot.entity;
 
-public class GoldMultiplierEffect implements SpecialEffect {
+public class GoldMultiplier extends ItemEffect {
 	private final double multiplier;
 	private final int durationDays;
 
-	public GoldMultiplierEffect(double multiplier, int durationDays) {
+	public GoldMultiplier(Long id, double multiplier, int durationDays) {
+		super(id);
 		this.multiplier = multiplier;
 		this.durationDays = durationDays;
 	}
 
 	@Override
-	public void applyEffect(PlayerProfile player) {
+	public void use(PlayerProfile player) {
 		player.setGoldMultiplier(multiplier);
 		player.setMultiplierDuration(durationDays);
 	}

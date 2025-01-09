@@ -2,20 +2,20 @@ package com.game.cdcs.bot.entity;
 
 import java.time.LocalDate;
 
-public class MissionPhoto {
+public class Photo {
 
 	private final Long id;
 	private final String telegramId;
-	private MissionRecord missionRecord;
+	private CityMissionRecord missionRecord;
 	private final LocalDate uploadedAt;
-	private MissionPhotoState state;
+	private PhotoState state;
 
-	public MissionPhoto(Long id, String telegramId, MissionRecord missionRecord, LocalDate uploadedAt) {
+	public Photo(Long id, String telegramId, CityMissionRecord missionRecord, LocalDate uploadedAt) {
 		this.id = id;
 		this.telegramId = telegramId;
 		this.missionRecord = missionRecord;
 		this.uploadedAt = uploadedAt;
-		this.state = MissionPhotoState.CREATED;
+		this.state = PhotoState.CREATED;
 	}
 
 	public Long getId() {
@@ -26,11 +26,11 @@ public class MissionPhoto {
 		return telegramId;
 	}
 
-	public void setMissionRecord(MissionRecord missionRecord) {
+	public void setMissionRecord(CityMissionRecord missionRecord) {
 		this.missionRecord = missionRecord;
 	}
 
-	public MissionRecord getMissionRecord() {
+	public CityMissionRecord getMissionRecord() {
 		return missionRecord;
 	}
 
@@ -38,11 +38,11 @@ public class MissionPhoto {
 		return uploadedAt;
 	}
 
-	public MissionPhotoState getState() {
+	public PhotoState getState() {
 		return state;
 	}
 
-	public void setState(MissionPhotoState state) {
+	public void setState(PhotoState state) {
 		this.state = state;
 	}
 }

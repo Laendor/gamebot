@@ -1,14 +1,15 @@
 package com.game.cdcs.bot.entity;
 
-public class RadarEffect implements SpecialEffect {
+public class Radar extends ItemEffect {
 	private final int durationDays;
 
-	public RadarEffect(int durationDays) {
+	public Radar(Long id, int durationDays) {
+		super(id);
 		this.durationDays = durationDays;
 	}
 
 	@Override
-	public void applyEffect(PlayerProfile player) {
+	public void use(PlayerProfile player) {
 		player.setRadarActive(true);
 		player.setRadarDuration(durationDays);
 	}

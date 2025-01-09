@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import com.game.cdcs.bot.entity.MissionPhoto;
+import com.game.cdcs.bot.entity.Photo;
 import com.game.cdcs.bot.handleupdate.CallbackCommand;
 import com.game.cdcs.bot.handleupdate.SendResult;
 import com.game.cdcs.bot.helper.TelegramHelper;
@@ -34,7 +34,7 @@ public class ShowPhotosToApprove {
 		InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
 		List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
-		for (MissionPhoto photo : missionPhotos) {
+		for (Photo photo : missionPhotos) {
 
 			InlineKeyboardButton button = telegramHelper.createButton(
 					photo.getMissionRecord().getMission().getName() + " di "

@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import com.game.cdcs.bot.entity.Mission;
-import com.game.cdcs.bot.entity.MissionPhoto;
-import com.game.cdcs.bot.entity.MissionPhotoState;
-import com.game.cdcs.bot.entity.MissionRecord;
+import com.game.cdcs.bot.entity.CityMission;
+import com.game.cdcs.bot.entity.Photo;
+import com.game.cdcs.bot.entity.PhotoState;
+import com.game.cdcs.bot.entity.CityMissionRecord;
 import com.game.cdcs.bot.entity.PlayerProfile;
 import com.game.cdcs.bot.handleupdate.SendResult;
 import com.game.cdcs.bot.helper.TelegramHelper;
@@ -59,7 +59,7 @@ public class RegisterPhotoForMission {
 		var mission = missionOpt.get();
 
 		String photoTelegramId = update.getMessage().getPhoto().get(0).getFileId();
-		var missionPhoto = new MissionPhoto(missionPhotoRepository.nextId(), photoTelegramId, null, LocalDate.now());
+		var missionPhoto = new Photo(missionPhotoRepository.nextId(), photoTelegramId, null, LocalDate.now());
 		missionPhotoRepository.put(missionPhoto);
 
 		var missionRecord = getExistingMissionRecordOrCreateNew(mission, profile, missionPhoto);
@@ -70,18 +70,18 @@ public class RegisterPhotoForMission {
 				+ mission.getGoal().getDescription() + ". L'amministratore valuterà la tua foto."));
 	}
 
-	private MissionRecord getExistingMissionRecordOrCreateNew(Mission mission, PlayerProfile profile,
-			MissionPhoto missionPhoto) {
+	private CityMissionRecord getExistingMissionRecordOrCreateNew(CityMission mission, PlayerProfile profile,
+			Photo missionPhoto) {
 		var missionRecordOpt = profile.getMissionRecords().stream()
 				.filter(mr -> mr.getMission().getName().equals(mission.getName())).findFirst();
 		if (missionRecordOpt.isPresent()) {
 			var missionRecord = missionRecordOpt.get();
 			var oldMissionPhoto = missionRecord.getMissionPhoto();
-			oldMissionPhoto.setState(MissionPhotoState.REPLACED);
+			oldMissionPhoto.setState(PhotoState.REPLACED);
 			missionRecord.setMissionPhoto(missionPhoto);
 			return missionRecord;
 		}
-		var missionRecord = new MissionRecord(mission, LocalDate.now(), profile, missionPhoto);
+		var missionRecord = new CityMissionRecord(mission, LocalDate.now(), profile, missionPhoto);
 		profile.getMissionRecords().add(missionRecord);
 		missionRecordRepository.put(missionRecord);
 		return missionRecord;

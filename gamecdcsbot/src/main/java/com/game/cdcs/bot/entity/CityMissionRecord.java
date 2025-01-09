@@ -3,24 +3,24 @@ package com.game.cdcs.bot.entity;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class MissionRecord {
+public class CityMissionRecord {
 
-	private final Mission mission;
+	private final CityMission mission;
 	private final PlayerProfile playerProfile;
-	private MissionRecordState state;
+	private CityMissionRecordState state;
 	private final LocalDate startDate;
 	private LocalDate completionDate;
-	private MissionPhoto missionPhoto;
+	private Photo missionPhoto;
 
-	public MissionRecord(Mission mission, LocalDate startDate, PlayerProfile playerProfile, MissionPhoto missionPhoto) {
+	public CityMissionRecord(CityMission mission, LocalDate startDate, PlayerProfile playerProfile, Photo missionPhoto) {
 		this.mission = mission;
 		this.playerProfile = playerProfile;
 		this.startDate = startDate;
 		this.missionPhoto = missionPhoto;
-		this.state = MissionRecordState.STARTED;
+		this.state = CityMissionRecordState.STARTED;
 	}
 
-	public Mission getMission() {
+	public CityMission getMission() {
 		return mission;
 	}
 
@@ -36,11 +36,11 @@ public class MissionRecord {
 		return playerProfile;
 	}
 
-	public MissionRecordState getState() {
+	public CityMissionRecordState getState() {
 		return state;
 	}
 
-	public void setState(MissionRecordState state) {
+	public void setState(CityMissionRecordState state) {
 		this.state = state;
 	}
 
@@ -48,11 +48,11 @@ public class MissionRecord {
 		this.completionDate = completionDate;
 	}
 
-	public MissionPhoto getMissionPhoto() {
+	public Photo getMissionPhoto() {
 		return missionPhoto;
 	}
 
-	public void setMissionPhoto(MissionPhoto missionPhoto) {
+	public void setMissionPhoto(Photo missionPhoto) {
 		this.missionPhoto = missionPhoto;
 	}
 
@@ -69,7 +69,7 @@ public class MissionRecord {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MissionRecord other = (MissionRecord) obj;
+		CityMissionRecord other = (CityMissionRecord) obj;
 		return Objects.equals(mission.getName(), other.getMission().getName())
 				&& Objects.equals(playerProfile.getName(), other.getPlayerProfile().getName());
 	}

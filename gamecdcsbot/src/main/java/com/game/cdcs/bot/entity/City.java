@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public class City {
 	private final String name;
-	private final List<Mission> missions = new ArrayList<>();
+	private final List<CityMission> missions = new ArrayList<>();
 
 	public City(String name) {
 		this.name = name;
@@ -16,11 +16,11 @@ public class City {
 		return name;
 	}
 
-	public List<Mission> getMissions() {
+	public List<CityMission> getMissions() {
 		return missions;
 	}
 
-	public Optional<Mission> getMissionByName(String missionName) {
+	public Optional<CityMission> getMissionByName(String missionName) {
 		return missions.stream().filter(mission -> mission.getName().equalsIgnoreCase(missionName)).findFirst();
 	}
 }

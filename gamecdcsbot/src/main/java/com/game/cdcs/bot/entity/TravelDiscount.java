@@ -1,16 +1,18 @@
 package com.game.cdcs.bot.entity;
 
-public class TravelDiscountEffect implements SpecialEffect {
+public class TravelDiscount extends ItemEffect {
+
 	private final int discountPercentage;
 	private final int durationDays;
 
-	public TravelDiscountEffect(int discountPercentage, int durationDays) {
+	public TravelDiscount(Long id, int discountPercentage, int durationDays) {
+		super(id);
 		this.discountPercentage = discountPercentage;
 		this.durationDays = durationDays;
 	}
 
 	@Override
-	public void applyEffect(PlayerProfile player) {
+	public void use(PlayerProfile player) {
 		player.setTravelDiscount(discountPercentage);
 		player.setDiscountDuration(durationDays);
 	}

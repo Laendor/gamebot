@@ -7,24 +7,24 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-import com.game.cdcs.bot.entity.MissionPhoto;
-import com.game.cdcs.bot.entity.MissionPhotoState;
+import com.game.cdcs.bot.entity.Photo;
+import com.game.cdcs.bot.entity.PhotoState;
 
 @Component
 public class MissionPhotoRepository {
 
-	private final Map<Long, MissionPhoto> photos = new HashMap<>();
+	private final Map<Long, Photo> photos = new HashMap<>();
 
-	public Optional<MissionPhoto> get(Long id) {
+	public Optional<Photo> get(Long id) {
 		return Optional.ofNullable(photos.get(id));
 	}
 
-	public void put(MissionPhoto photo) {
+	public void put(Photo photo) {
 		photos.put(photo.getId(), photo);
 	}
 
-	public List<MissionPhoto> getPhotosAwaitingToBeApprovedOrderedByUploadedAtDesc() {
-		return photos.values().stream().filter(photo -> photo.getState() == MissionPhotoState.CREATED)//
+	public List<Photo> getPhotosAwaitingToBeApprovedOrderedByUploadedAtDesc() {
+		return photos.values().stream().filter(photo -> photo.getState() == PhotoState.CREATED)//
 				.sorted((f1, f2) -> f2.getUploadedAt().compareTo(f1.getUploadedAt()))//
 				.toList();
 	}

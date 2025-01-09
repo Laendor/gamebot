@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import com.game.cdcs.bot.entity.MissionRecordState;
+import com.game.cdcs.bot.entity.CityMissionRecordState;
 import com.game.cdcs.bot.entity.PlayerProfile;
 import com.game.cdcs.bot.handleupdate.CallbackCommand;
 import com.game.cdcs.bot.handleupdate.SendResult;
@@ -50,6 +50,7 @@ public class ShowPlayerMissionDetails {
 		}
 		var missionRecord = missionRecordOpt.get();
 		var mission = missionRecord.getMission();
+		var missionReward = mission.getReward();
 
 		StringBuilder missionDetails = new StringBuilder();
 		missionDetails.append("Missione: " + mission.getName() + "\n");
@@ -62,11 +63,11 @@ public class ShowPlayerMissionDetails {
 		}
 		missionDetails.append("Stato: " + missionRecord.getState().toString() + "\n");
 
-		if (mission.getGoldReward() > 0) {
-			missionDetails.append("Ricompensa oro: " + mission.getGoldReward() + "€ \n");
+		if (missionReward.getGoldReward() > 0) {
+			missionDetails.append("Ricompensa oro: " + missionReward.getGoldReward() + "€ \n");
 		}
 
-		var rewardOpt = mission.getSpecialEffectReward();
+		var rewardOpt = missionReward.getSpecialEffectReward();
 		if (rewardOpt.isPresent()) {
 			missionDetails.append("Ricompensa oggetto: " + rewardOpt.get().getName() + "\n");
 		}
@@ -74,7 +75,7 @@ public class ShowPlayerMissionDetails {
 		var sendPhoto = telegramHelper.buildSendPhoto(chatId, missionDetails.toString(),
 				missionRecord.getMissionPhoto().getTelegramId());
 
-		if (missionRecord.getState() == MissionRecordState.STARTED) {
+		if (missionRecord.getState() == CityMissionRecordState.STARTED) {
 			updateSendMessageWithResendPhotoButton(sendPhoto, mission.getName());
 		}
 

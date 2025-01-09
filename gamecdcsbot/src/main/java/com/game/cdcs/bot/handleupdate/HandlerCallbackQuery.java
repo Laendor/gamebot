@@ -7,7 +7,7 @@ import com.game.cdcs.bot.helper.TelegramHelper;
 import com.game.cdcs.bot.service.AskPhotoForMission;
 import com.game.cdcs.bot.service.ShowPhotoToApprove;
 import com.game.cdcs.bot.service.GenerateCityMission;
-import com.game.cdcs.bot.service.ShowAvailableCities;
+import com.game.cdcs.bot.service.ShowCitiesToTravel;
 import com.game.cdcs.bot.service.ShowCityMissions;
 import com.game.cdcs.bot.service.ShowPhotosToApprove;
 import com.game.cdcs.bot.service.ShowPlayerMenu;
@@ -39,7 +39,7 @@ public class HandlerCallbackQuery {
 	public ShowPlayerMissionDetails showPlayeMissionDetails;
 
 	@Autowired
-	public ShowAvailableCities availableCities;
+	public ShowCitiesToTravel availableCities;
 
 	@Autowired
 	public ShowPhotosToApprove showPhotosToApprove;

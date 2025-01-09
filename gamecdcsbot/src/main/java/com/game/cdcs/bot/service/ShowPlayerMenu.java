@@ -38,10 +38,10 @@ public class ShowPlayerMenu {
 		keyboard.add(List.of(telegramHelper.createButton("Vedi inventario", CallbackCommand.INVENTORY.name())));
 
 		// admin
-		keyboard.add(List.of(telegramHelper.createButton("Genera nuove missioni cittadine",
+		keyboard.add(List.of(telegramHelper.createButton("Genera nuove missioni cittadine [ADMIN]",
 				CallbackCommand.GENERATE_CITY_MISSIONS.name())));
-		keyboard.add(List
-				.of(telegramHelper.createButton("Vedi foto da approvare", CallbackCommand.PHOTOS_TO_APPROVE.name())));
+		keyboard.add(List.of(telegramHelper.createButton("Vedi foto da approvare [ADMIN]",
+				CallbackCommand.PHOTOS_TO_APPROVE.name())));
 
 		keyboardMarkup.setKeyboard(keyboard);
 		message.setReplyMarkup(keyboardMarkup);

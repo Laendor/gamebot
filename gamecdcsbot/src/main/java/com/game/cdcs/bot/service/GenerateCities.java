@@ -34,6 +34,6 @@ public class GenerateCities {
 		mapGraph.addPath("Roma", "Napoli", 20);
 		mapGraph.addPath("Milano", "Napoli", 40);
 
-		return new SendResult(telegramHelper.buildSendTextMessage(chatId, "Città generate"));
+		return new SendResult(telegramHelper.buildSendTextMessage(chatId, "Generate 3 Città"));
 	}
 }

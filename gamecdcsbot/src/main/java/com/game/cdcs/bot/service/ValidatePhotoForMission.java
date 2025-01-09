@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import com.game.cdcs.bot.entity.MissionPhotoState;
+import com.game.cdcs.bot.entity.PhotoState;
 import com.game.cdcs.bot.handleupdate.SendResult;
 import com.game.cdcs.bot.helper.TelegramHelper;
 import com.game.cdcs.bot.repository.MissionPhotoRepository;
@@ -28,7 +28,7 @@ public class ValidatePhotoForMission {
 		}
 		var missionPhoto = missionPhotoOpt.get();
 
-		missionPhoto.setState(isPhotoApproved ? MissionPhotoState.APPROVED : MissionPhotoState.NOT_APPROVED);
+		missionPhoto.setState(isPhotoApproved ? PhotoState.APPROVED : PhotoState.NOT_APPROVED);
 		if (isPhotoApproved) {
 			return completeMission.buildSendResult(missionPhoto.getMissionRecord().getPlayerProfile(),
 					missionPhoto.getMissionRecord());

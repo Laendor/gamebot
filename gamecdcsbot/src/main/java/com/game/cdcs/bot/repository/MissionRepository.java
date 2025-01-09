@@ -6,18 +6,18 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-import com.game.cdcs.bot.entity.Mission;
+import com.game.cdcs.bot.entity.CityMission;
 
 @Component
 public class MissionRepository {
 
-	private final Map<String, Mission> missions = new HashMap<>();
+	private final Map<String, CityMission> missions = new HashMap<>();
 
-	public Optional<Mission> get(String name) {
+	public Optional<CityMission> get(String name) {
 		return Optional.ofNullable(missions.get(name));
 	}
 
-	public void put(String string, Mission mission) {
+	public void put(String string, CityMission mission) {
 		missions.put(string, mission);
 	}
 }

@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import com.game.cdcs.bot.handleupdate.HandlerOnUpdateReceived;
 import com.game.cdcs.bot.handleupdate.SendResult;
+import com.game.cdcs.bot.service.GenerateAllEntities;
 
 import jakarta.annotation.PostConstruct;
 
@@ -21,15 +22,17 @@ public class GameBot extends TelegramLongPollingBot {
 
 	private static final String BOT_USERNAME = "gamecdcs_bot";
 
+	private static final Long ADMIN_ID = 68504738L;
+
 	@Autowired
-	public GameBotInitializer initializer;
+	public GenerateAllEntities generateAllEntities;
 
 	@Autowired
 	public HandlerOnUpdateReceived handlerOnUpdateReceiver;
 
 	@PostConstruct
 	public void init() {
-		initializer.run();
+		sendResult(generateAllEntities.buildSendResult(ADMIN_ID));
 	}
 
 	@Override

@@ -9,7 +9,8 @@ public class PlayerProfile {
 	private final Long chatId;
 	private final String name;
 	private final Set<String> trophyCities;
-	private final List<MissionRecord> missionRecords;
+	private final List<CityMissionRecord> missionRecords;
+	private final List<Item> items;
 	private String currentCity;
 	private double goldMultiplier;
 	private boolean radarActive;
@@ -28,6 +29,7 @@ public class PlayerProfile {
 		this.currentCity = currentCity;
 		this.trophyCities = new HashSet<>();
 		this.missionRecords = new ArrayList<>();
+		this.items = new ArrayList<>();
 		this.radarActive = false;
 		this.radarDuration = 0;
 		this.travelDiscount = 0;
@@ -148,11 +150,11 @@ public class PlayerProfile {
 			goldMultiplier = 1.0;
 	}
 
-	public List<MissionRecord> getMissionRecords() {
+	public List<CityMissionRecord> getMissionRecords() {
 		return missionRecords;
 	}
 
-	public boolean hasMissionInRecords(Mission mission) {
+	public boolean hasMissionInRecords(CityMission mission) {
 		return missionRecords.stream().map(missionRecord -> missionRecord.getMission())
 				.anyMatch(missionOfRecord -> missionOfRecord.equals(mission));
 	}
@@ -167,6 +169,10 @@ public class PlayerProfile {
 
 	public void clearMissionNameAwatingPhoto() {
 		this.missionNameAwatingPhoto = null;
+	}
+
+	public List<Item> getItems() {
+		return items;
 	}
 
 }

@@ -20,7 +20,7 @@ import com.game.cdcs.bot.repository.CityRepository;
 import com.game.cdcs.bot.repository.PlayerProfileRepository;
 
 @Component
-public class ShowAvailableCities {
+public class ShowCitiesToTravel {
 
 	@Autowired
 	public TelegramHelper telegramHelper;

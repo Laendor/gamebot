@@ -101,7 +101,6 @@ public class HandlerOnUpdateReceived {
 			}
 		} else if (update.hasCallbackQuery()) {
 			Long chatId = update.getCallbackQuery().getMessage().getChatId();
-			playerProfileRepository.resetMissionNameAwaitingPhoto(chatId);
 			if (isUpdateSendFromProfilePlayer(chatId)) {
 				playerProfileRepository.resetMissionNameAwaitingPhoto(chatId);
 			}
