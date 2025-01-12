@@ -5,11 +5,14 @@ import org.springframework.stereotype.Component;
 
 import com.game.cdcs.bot.helper.TelegramHelper;
 import com.game.cdcs.bot.service.AskPhotoForMission;
-import com.game.cdcs.bot.service.ShowPhotoToApprove;
+import com.game.cdcs.bot.service.AskTargetPlayerToUsePlayerItem;
 import com.game.cdcs.bot.service.GenerateCityMission;
 import com.game.cdcs.bot.service.ShowCitiesToTravel;
 import com.game.cdcs.bot.service.ShowCityMissions;
+import com.game.cdcs.bot.service.ShowPhotoToApprove;
 import com.game.cdcs.bot.service.ShowPhotosToApprove;
+import com.game.cdcs.bot.service.ShowPlayerItemMenu;
+import com.game.cdcs.bot.service.ShowPlayerItems;
 import com.game.cdcs.bot.service.ShowPlayerMenu;
 import com.game.cdcs.bot.service.ShowPlayerMissionDetails;
 import com.game.cdcs.bot.service.ShowPlayerMissions;
@@ -21,13 +24,16 @@ import com.game.cdcs.bot.service.ValidatePhotoForMission;
 public class HandlerCallbackQuery {
 
 	@Autowired
+	public TravelToCity changeCity;
+
+	@Autowired
+	public AskTargetPlayerToUsePlayerItem askTargetPlayerToUsePlayerItem;
+
+	@Autowired
 	public ShowPublicPlayerProfile publicPlayerProfile;
 
 	@Autowired
 	public ShowPlayerMenu playMenu;
-
-	@Autowired
-	public TravelToCity changeCity;
 
 	@Autowired
 	public ShowCityMissions cityMissions;
@@ -40,6 +46,12 @@ public class HandlerCallbackQuery {
 
 	@Autowired
 	public ShowCitiesToTravel availableCities;
+
+	@Autowired
+	public ShowPlayerItems showPlayerItems;
+
+	@Autowired
+	public ShowPlayerItemMenu showPlayerItemMenu;
 
 	@Autowired
 	public ShowPhotosToApprove showPhotosToApprove;
@@ -83,9 +95,24 @@ public class HandlerCallbackQuery {
 		if (callbackData.equals(CallbackCommand.PHOTOS_TO_APPROVE.name())) {
 			return showPhotosToApprove.buildSendResult(chatId);
 		}
+		if (callbackData.equals(CallbackCommand.INVENTORY.name())) {
+			return showPlayerItems.buildSendResult(chatId);
+		}
 
 		if (callbackData.startsWith(CallbackCommand.MOVE_TO_.name())) {
 			return changeCity.buildSendResult(chatId, callbackData.replace(CallbackCommand.MOVE_TO_.name(), ""));
+		}
+		if (callbackData.startsWith(CallbackCommand.ASK_TARGET_PLAYER_FOR_ITEM_.name())) {
+			return askTargetPlayerToUsePlayerItem.buildSendResult(chatId,
+					callbackData.replace(CallbackCommand.ASK_TARGET_PLAYER_FOR_ITEM_.name(), ""));
+		}
+		if (callbackData.startsWith(CallbackCommand.USE_ITEM_ON_ANY_OTHER_PLAYER.name())) {
+			// return changeCity.buildSendResult(chatId,
+			// callbackData.replace(CallbackCommand.USE_ITEM_.name(), ""));
+		}
+		if (callbackData.startsWith(CallbackCommand.PLAYER_ITEM_DETAILS_.name())) {
+			return showPlayeMissionDetails.buildSendResult(chatId,
+					callbackData.replace(CallbackCommand.PLAYER_ITEM_DETAILS_.name(), ""));
 		}
 		if (callbackData.startsWith(CallbackCommand.ASK_PHOTO_FOR_MISSION_.name())) {
 			return askPhotoForMission.buildSendResult(chatId,
@@ -109,7 +136,6 @@ public class HandlerCallbackQuery {
 		}
 
 		return new SendResult(telegramHelper.buildSendTextMessage(chatId, "Opzione non valida."));
-
 	}
 
 }

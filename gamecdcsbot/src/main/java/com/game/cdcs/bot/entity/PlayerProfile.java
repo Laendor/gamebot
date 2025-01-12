@@ -1,36 +1,33 @@
 package com.game.cdcs.bot.entity;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 public class PlayerProfile {
 	private final Long chatId;
 	private final String name;
-	private final Set<String> trophyCities;
 	private final List<CityMissionRecord> missionRecords;
 	private final List<Item> items;
-	private String currentCity;
+	private City currentCity;
 	private double goldMultiplier;
-	private boolean radarActive;
+	private boolean isRadarActive;
+	private boolean isDiscountActive;
 	private int gold;
-	private int trophies;
 	private int radarDuration;
 	private int travelDiscount;
 	private int discountDuration;
 	private int multiplierDuration;
 	private String missionNameAwatingPhoto;
 
-	public PlayerProfile(Long chatId, String name, int gold, String currentCity) {
+	public PlayerProfile(Long chatId, String name, int gold, City currentCity) {
 		this.chatId = chatId;
 		this.name = name;
 		this.gold = gold;
 		this.currentCity = currentCity;
-		this.trophyCities = new HashSet<>();
 		this.missionRecords = new ArrayList<>();
 		this.items = new ArrayList<>();
-		this.radarActive = false;
+		this.isRadarActive = false;
 		this.radarDuration = 0;
 		this.travelDiscount = 0;
 		this.discountDuration = 0;
@@ -54,42 +51,41 @@ public class PlayerProfile {
 		this.gold += amount;
 	}
 
-	public Set<String> getTrophyCities() {
-		return trophyCities;
+	public List<Item> getTrophyCities() {
+		return items.stream()//
+				.filter(item -> item.getItemEffect() instanceof Trophy)//
+				.toList();
 	}
 
-	public int getTrophies() {
-		return trophies;
-	}
-
-	public void addTrophy() {
-		this.trophies++;
-		trophyCities.add(currentCity);
-	}
-
-	public void addTrophy(String city) {
-		this.trophies++;
-		trophyCities.add(city);
+	public long getTrophies() {
+		return items.stream()//
+				.filter(item -> item.getItemEffect() instanceof Trophy)//
+				.map(item -> ((Trophy) (item.getItemEffect())).getCityName())//
+				.distinct()//
+				.count();
 	}
 
 	public boolean hasTrophyFrom(String city) {
-		return trophyCities.contains(city);
+		return items.stream()//
+				.filter(item -> item.getItemEffect() instanceof Trophy)//
+				.map(item -> (Trophy) item.getItemEffect())//
+				.anyMatch(trophy -> trophy.getCityName().equals(city));
 	}
 
-	public String getCurrentCity() {
+	public City getCurrentCity() {
 		return currentCity;
 	}
 
-	public void setCurrentCity(String currentCity) {
+	public void setCurrentCity(City currentCity) {
 		this.currentCity = currentCity;
 	}
 
 	public boolean isRadarActive() {
-		return radarActive;
+		return isRadarActive;
 	}
 
 	public void setRadarActive(boolean radarActive) {
-		this.radarActive = radarActive;
+		this.isRadarActive = radarActive;
 	}
 
 	public int getRadarDuration() {
@@ -137,7 +133,7 @@ public class PlayerProfile {
 		if (radarDuration > 0)
 			radarDuration--;
 		if (radarDuration == 0)
-			radarActive = false;
+			isRadarActive = false;
 
 		if (discountDuration > 0)
 			discountDuration--;
@@ -175,4 +171,23 @@ public class PlayerProfile {
 		return items;
 	}
 
+	public boolean hasItems() {
+		return !items.isEmpty();
+	}
+
+	public Optional<Item> getItem(Long playerItemId) {
+		return items.stream().filter(item -> item.getId() == playerItemId).findFirst();
+	}
+
+	public void removeItem(Item item) {
+		items.remove(item);
+	}
+
+	public boolean isDiscountActive() {
+		return isDiscountActive;
+	}
+
+	public void setDiscountActive(boolean isDiscountActive) {
+		this.isDiscountActive = isDiscountActive;
+	}
 }

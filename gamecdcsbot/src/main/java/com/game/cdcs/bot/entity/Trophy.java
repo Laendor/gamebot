@@ -5,17 +5,8 @@ public class Trophy extends ItemEffect {
 	private final City city;
 
 	public Trophy(Long id, City city) {
-		super(id);
+		super(id, "Trofeo");
 		this.city = city;
-	}
-
-	@Override
-	public void use(PlayerProfile player) {
-	}
-
-	@Override
-	public String getName() {
-		return "Trofeo";
 	}
 
 	@Override
@@ -25,6 +16,10 @@ public class Trophy extends ItemEffect {
 
 	public City getCity() {
 		return city;
+	}
+
+	public String getCityName() {
+		return city.getName();
 	}
 
 }

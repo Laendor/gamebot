@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.game.cdcs.bot.entity.City;
-import com.game.cdcs.bot.entity.MapGraph;
+import com.game.cdcs.bot.entity.Route;
 import com.game.cdcs.bot.handleupdate.SendResult;
 import com.game.cdcs.bot.helper.TelegramHelper;
 import com.game.cdcs.bot.repository.CityRepository;
@@ -16,23 +16,22 @@ public class GenerateCities {
 	public CityRepository cityRepository;
 
 	@Autowired
-	public MapGraph mapGraph;
-
-	@Autowired
 	public TelegramHelper telegramHelper;
 
 	public SendResult buildSendResult(Long chatId) {
-		cityRepository.put("Roma", new City("Roma"));
-		cityRepository.put("Milano", new City("Milano"));
-		cityRepository.put("Napoli", new City("Napoli"));
 
-		mapGraph.addCity("Roma");
-		mapGraph.addCity("Milano");
-		mapGraph.addCity("Napoli");
+		var roma = new City("Roma");
+		cityRepository.put("Roma", roma);
 
-		mapGraph.addPath("Roma", "Milano", 30);
-		mapGraph.addPath("Roma", "Napoli", 20);
-		mapGraph.addPath("Milano", "Napoli", 40);
+		var milano = new City("Milano");
+		cityRepository.put("Milano", milano);
+
+		var napoli = new City("Napoli");
+		cityRepository.put("Napoli", napoli);
+
+		roma.addDoubleRoute(new Route(roma, milano, 30));
+		roma.addDoubleRoute(new Route(roma, napoli, 20));
+		milano.addDoubleRoute(new Route(milano, napoli, 40));
 
 		return new SendResult(telegramHelper.buildSendTextMessage(chatId, "Generate 3 Città"));
 	}

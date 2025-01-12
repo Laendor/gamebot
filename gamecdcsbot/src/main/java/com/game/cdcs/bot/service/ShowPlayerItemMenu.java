@@ -10,6 +10,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import com.game.cdcs.bot.entity.Item;
+import com.game.cdcs.bot.entity.ItemEffectUsableOnAnyOtherPlayer;
 import com.game.cdcs.bot.entity.PlayerProfile;
 import com.game.cdcs.bot.handleupdate.CallbackCommand;
 import com.game.cdcs.bot.handleupdate.SendResult;
@@ -17,52 +19,46 @@ import com.game.cdcs.bot.helper.TelegramHelper;
 import com.game.cdcs.bot.repository.PlayerProfileRepository;
 
 @Component
-public class ShowPublicPlayerProfile {
-
+public class ShowPlayerItemMenu {
 	@Autowired
 	public TelegramHelper telegramHelper;
 
 	@Autowired
 	public PlayerProfileRepository playerProfileRepository;
 
-	public SendResult buildSendResult(Long chatId) {
+	public SendResult buildSendResult(Long chatId, Long playerItemId) {
 		Optional<PlayerProfile> profileOpt = playerProfileRepository.get(chatId);
 		if (profileOpt.isEmpty()) {
 			return new SendResult(telegramHelper.buildSendTextMessage(chatId, "Profilo non trovato."));
 		}
-
 		PlayerProfile profile = profileOpt.get();
-		String profileInfo = buildPublicPlayerProfileText(profile);
 
-		var sendMessage = telegramHelper.buildSendTextMessage(chatId, profileInfo);
-
-		if (profile.hasItems()) {
-			buildInventoryButton(sendMessage);
+		Optional<Item> itemOpt = profile.getItem(playerItemId);
+		if (itemOpt.isEmpty()) {
+			return new SendResult(telegramHelper.buildSendTextMessage(chatId, "Oggetto non trovato."));
 		}
+		Item item = itemOpt.get();
 
-		return new SendResult(sendMessage);
-	}
+		StringBuilder itemDetails = new StringBuilder();
+		itemDetails//
+				.append("Oggetto " + item.getItemEffect().getName() + "\n")//
+				.append("Descrizione " + item.getItemEffect().getDescription() + "\n")//
+		;
 
-	private String buildPublicPlayerProfileText(PlayerProfile profile) {
-		return String.format("Profilo Giocatore:\n" //
-				+ "Nome: %s\n" //
-				+ "Posizione: %s\n" //
-				+ "Oro: %d\n" //
-				+ "Trofei: %d\n" //
-				+ "Oggetti: %d\n", //
-				profile.getName(), profile.getCurrentCity(), profile.getGold(), profile.getTrophies(),
-				profile.getItems().size());
-	}
+		SendMessage sendMessage = telegramHelper.buildSendTextMessage(chatId, itemDetails.toString());
 
-	private void buildInventoryButton(SendMessage sendMessage) {
 		InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
 		List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
-		InlineKeyboardButton detailMissionButton = telegramHelper.createButton("Inventario",
-				CallbackCommand.INVENTORY.name());
-		keyboard.add(List.of(detailMissionButton));
+		if (item instanceof ItemEffectUsableOnAnyOtherPlayer) {
+			InlineKeyboardButton useItemButton = telegramHelper.createButton("Usa",
+					CallbackCommand.ASK_TARGET_PLAYER_FOR_ITEM_.name() + item.getId());
+			keyboard.add(List.of(useItemButton));
+		}
 
 		keyboardMarkup.setKeyboard(keyboard);
 		sendMessage.setReplyMarkup(keyboardMarkup);
+
+		return new SendResult(sendMessage);
 	}
 }

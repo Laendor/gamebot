@@ -1,10 +1,10 @@
 package com.game.cdcs.bot.entity;
 
-public class Radar extends ItemEffect {
+public class Radar extends ItemEffect implements ItemEffectUsableOnSelfPlayer {
 	private final int durationDays;
 
-	public Radar(Long id, int durationDays) {
-		super(id);
+	public Radar(Long id, String name, int durationDays) {
+		super(id, name);
 		this.durationDays = durationDays;
 	}
 
@@ -19,8 +19,4 @@ public class Radar extends ItemEffect {
 		return "Radar attivo per " + durationDays + " giorni";
 	}
 
-	@Override
-	public String getName() {
-		return "Radar";
-	}
 }

@@ -28,7 +28,7 @@ public class ShowPlayerMenu {
 		List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
 
 		// player
-		keyboard.add(List.of(telegramHelper.createButton("Guarda profilo", CallbackCommand.PROFILE.name())));
+		keyboard.add(List.of(telegramHelper.createButton("Vedi profilo", CallbackCommand.PROFILE.name())));
 		keyboard.add(List
 				.of(telegramHelper.createButton("Vedi le missioni cittadine", CallbackCommand.CITY_MISSIONS.name())));
 		keyboard.add(

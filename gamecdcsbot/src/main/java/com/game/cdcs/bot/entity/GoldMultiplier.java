@@ -1,11 +1,11 @@
 package com.game.cdcs.bot.entity;
 
-public class GoldMultiplier extends ItemEffect {
+public class GoldMultiplier extends ItemEffect implements ItemEffectUsableOnSelfPlayer {
 	private final double multiplier;
 	private final int durationDays;
 
-	public GoldMultiplier(Long id, double multiplier, int durationDays) {
-		super(id);
+	public GoldMultiplier(Long id, String name, double multiplier, int durationDays) {
+		super(id, name);
 		this.multiplier = multiplier;
 		this.durationDays = durationDays;
 	}
@@ -21,8 +21,4 @@ public class GoldMultiplier extends ItemEffect {
 		return "Moltiplicatore di oro x" + multiplier + " per " + durationDays + " giorni";
 	}
 
-	@Override
-	public String getName() {
-		return "Moltiplicatore d'oro";
-	}
 }

@@ -38,13 +38,7 @@ public class ShowCityMissions {
 		}
 
 		PlayerProfile profile = profileOpt.get();
-		Optional<City> cityOpt = cityRepository.get(profile.getCurrentCity());
-		if (cityOpt.isEmpty()) {
-			return new SendResult(
-					telegramHelper.buildSendTextMessage(chatId, "Nessuna missione trovata per la tua città attuale."));
-		}
-
-		City city = cityOpt.get();
+		City city = profile.getCurrentCity();
 		StringBuilder missions = new StringBuilder("Missioni disponibili a " + city.getName() + ":\n");
 
 		InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();

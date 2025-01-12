@@ -19,4 +19,8 @@ public class Item {
 		return itemEffect;
 	}
 
+	public String getNameEffect() {
+		return itemEffect.getName();
+	}
+
 }

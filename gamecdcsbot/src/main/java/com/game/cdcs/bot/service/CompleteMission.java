@@ -11,10 +11,13 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import com.game.cdcs.bot.entity.CityMission;
 import com.game.cdcs.bot.entity.CityMissionRecord;
 import com.game.cdcs.bot.entity.CityMissionRecordState;
+import com.game.cdcs.bot.entity.Item;
 import com.game.cdcs.bot.entity.PlayerProfile;
 import com.game.cdcs.bot.entity.Reward;
+import com.game.cdcs.bot.entity.Trophy;
 import com.game.cdcs.bot.handleupdate.SendResult;
 import com.game.cdcs.bot.helper.TelegramHelper;
+import com.game.cdcs.bot.repository.ItemRepository;
 import com.game.cdcs.bot.repository.PlayerProfileRepository;
 
 @Component
@@ -22,6 +25,9 @@ public class CompleteMission {
 
 	@Autowired
 	public PlayerProfileRepository playerProfileRepository;
+
+	@Autowired
+	public ItemRepository itemRepository;
 
 	@Autowired
 	public TelegramHelper telegramHelper;
@@ -43,9 +49,9 @@ public class CompleteMission {
 
 		earnRewardMoney(profile, profilePlayerId, mission, reward, sendMessages);
 
-		earnRewardTrophy(profile, profilePlayerId, mission, reward, sendMessages);
+		earnRewardTrophyItem(profile, profilePlayerId, mission, reward, sendMessages);
 
-		earnRewardNoTrophy(profile, profilePlayerId, reward, sendMessages);
+		earnRewardNoTrophyItem(profile, profilePlayerId, reward, sendMessages);
 
 		var result = sendMessages.toArray(new SendMessage[sendMessages.size()]);
 		return new SendResult(result);
@@ -55,6 +61,7 @@ public class CompleteMission {
 	private void updateMissionStates(CityMissionRecord missionRecord) {
 		missionRecord.setState(CityMissionRecordState.COMPLETED);
 		missionRecord.setCompletionDate(LocalDate.now());
+
 	}
 
 	private void earnRewardMoney(PlayerProfile profile, Long profilePlayerId, CityMission mission, Reward reward,
@@ -71,22 +78,27 @@ public class CompleteMission {
 				+ "."));
 	}
 
-	private void earnRewardTrophy(PlayerProfile profile, Long profilePlayerId, CityMission mission, Reward reward,
+	private void earnRewardTrophyItem(PlayerProfile profile, Long profilePlayerId, CityMission mission, Reward reward,
 			List<SendMessage> sendMessages) {
 		if (reward.isTrophy()) {
-			profile.addTrophy(mission.getOriginCity().getName());
+			var rewardSpecialEffect = (Trophy) reward.getSpecialEffectReward().get();
+			var newItem = new Item(itemRepository.nextId(), rewardSpecialEffect);
+			itemRepository.put(newItem);
+			profile.getItems().add(newItem);
 			sendMessages.add(telegramHelper.buildSendTextMessage(profilePlayerId,
-					"Hai ottenuto il trofeo di " + mission.getOriginCity().getName() + "!"));
+					"Hai ottenuto il trofeo di " + rewardSpecialEffect.getCityName() + "!"));
 		}
 	}
 
-	private void earnRewardNoTrophy(PlayerProfile profile, Long profilePlayerId, Reward reward,
+	private void earnRewardNoTrophyItem(PlayerProfile profile, Long profilePlayerId, Reward reward,
 			List<SendMessage> sendMessages) {
 		if (reward.isNoTrophy()) {
 			var specialEffectReward = reward.getSpecialEffectReward().get();
-			specialEffectReward.use(profile);
+			var newItem = new Item(itemRepository.nextId(), specialEffectReward);
+			itemRepository.put(newItem);
+			profile.getItems().add(newItem);
 			sendMessages.add(telegramHelper.buildSendTextMessage(profilePlayerId,
-					"Effetto speciale sbloccato: " + specialEffectReward.getDescription()));
+					"Hai ottenuto un nuovo oggetto: " + specialEffectReward.getName()));
 		}
 	}
 
